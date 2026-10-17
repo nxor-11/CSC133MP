@@ -1,0 +1,61 @@
+package pkgSlTTTBackend;
+
+import java.util.Scanner;
+
+public class SlIOManager {
+
+    private Scanner myScanner;
+
+    public SlIOManager() {
+        myScanner = new Scanner(System.in);
+    }
+
+    protected static void initPrompt() {
+        System.out.println("Welcome to your unproductive time of the day!");
+        System.out.println("Enter valid row, column numbers separated by a space!\n");
+    }
+
+    protected static void rowColPrompt() {
+        System.out.print(
+                "Enter two numbers (0, 1, or 2) separated by a space, "
+                        + "or 'q' to quit: ");
+    }
+
+    protected static void invalidEntryMessage() {
+        System.out.println("Invalid input! Try again.");
+    }
+
+    public static void cellNotFreeMessage(final int row, final int col) {
+        System.out.println(
+                "cell  [" + row + ", " + col + "] is not available!");
+    }
+
+    protected static void machineWinMessage() {
+        System.out.println(
+                "Try again - this time machine outsmarted you!\n");
+    }
+
+    protected static void playerWinMessage() {
+        System.out.println(
+                "\nCongratulations you have outsmarted the computer!!\n");
+    }
+
+    protected static void gameDrawMessage() {
+        System.out.println(
+                "That round was a draw; let's play another round!\n");
+    }
+
+    protected static void playAgainMessage() {
+        System.out.println(
+                "Beginning another round; type \"q\" to quit!\n");
+    }
+
+    protected static void quitGameMessage() {
+        System.out.println(
+                "Good bye - game over, come again ASAP and waste more time!");
+    }
+
+    protected static void errorInPlayMessage() {
+        System.out.println("Something went wrong - bailing out!");
+    }
+}
