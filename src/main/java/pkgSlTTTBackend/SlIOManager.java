@@ -59,7 +59,7 @@ public class SlIOManager {
         System.out.println("Something went wrong - bailing out!");
     }
 
-    protected int[] readInputData() {
+    protected int[] readInputData() { //method for reading input, keeps player inputs within boundsby throwing error if out of biunds
         rowColPrompt();
 
         String input = myScanner.nextLine().trim();
@@ -91,5 +91,22 @@ public class SlIOManager {
             invalidEntryMessage();
             return new int[]{-1, -1};
         }
+    }
+
+    protected static void printBoard(final SlTTTBoard board) { //method for creating game board
+        System.out.println();
+
+        for (int row = 0; row < SlTTTSPOT.NUM_ROWS; row++) {
+            System.out.println(
+                    " " + board.getContent(row, 0)
+                            + " | " + board.getContent(row, 1)
+                            + " | " + board.getContent(row, 2));
+
+            if (row < SlTTTSPOT.NUM_ROWS - 1) {
+                System.out.println("---+---+---");
+            }
+        }
+
+        System.out.println();
     }
 }
