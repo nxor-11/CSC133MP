@@ -58,4 +58,38 @@ public class SlIOManager {
     protected static void errorInPlayMessage() {
         System.out.println("Something went wrong - bailing out!");
     }
+
+    protected int[] readInputData() {
+        rowColPrompt();
+
+        String input = myScanner.nextLine().trim();
+
+        if (input.equalsIgnoreCase("q")) {
+            return new int[]{SlTTTSPOT.GAME_QUIT};
+        }
+
+        String[] values = input.split("\\s+");
+
+        if (values.length != 2) {
+            invalidEntryMessage();
+            return new int[]{-1, -1};
+        }
+
+        try {
+            int row = Integer.parseInt(values[0]);
+            int col = Integer.parseInt(values[1]);
+
+            if (row < 0 || row >= SlTTTSPOT.NUM_ROWS
+                    || col < 0 || col >= SlTTTSPOT.NUM_COLS) {
+                invalidEntryMessage();
+                return new int[]{-1, -1};
+            }
+
+            return new int[]{row, col};
+
+        } catch (NumberFormatException error) {
+            invalidEntryMessage();
+            return new int[]{-1, -1};
+        }
+    }
 }
