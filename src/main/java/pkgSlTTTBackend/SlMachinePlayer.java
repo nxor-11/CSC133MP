@@ -24,4 +24,30 @@ public class SlMachinePlayer {
         gameStatus = SlTTTSPOT.GAME_QUIT;
         return gameStatus;
     }
+
+    protected int[] getUserInput() {
+        int[] userInput;
+
+        while (true) {
+            userInput = myIOManager.readInputData();
+
+            if (userInput.length == 1
+                    && userInput[0] == SlTTTSPOT.GAME_QUIT) {
+                return userInput;
+            }
+
+            if (userInput[0] < 0 || userInput[1] < 0) {
+                continue;
+            }
+
+            if (myT3Board.getContent(userInput[0], userInput[1])
+                    != SlTTTSPOT.DEFAULT_CHAR) {
+                SlIOManager.cellNotFreeMessage(
+                        userInput[0], userInput[1]);
+                continue;
+            }
+
+            return userInput;
+        }
+    }
 }
