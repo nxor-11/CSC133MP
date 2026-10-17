@@ -17,15 +17,32 @@ def steamworks4j_serverVersion = "1.9.0"
 def os = org.gradle.internal.os.OperatingSystem.current()
 def lwjglNatives = {
     if (os.isWindows()) return "natives-windows"
-    if (os.isMacOsX()) return "natives-macos"
+    // <AI PROMPT>
+    // Changed macOS native selection to choose Apple Silicon or Intel natives
+    // based on os.arch. A hardcoded natives-macos-arm64 breaks on Intel Macs,
+    // while plain natives-macos breaks on Apple Silicon.
+    if (os.isMacOsX()) {
+        return System.getProperty("os.arch").startsWith("aarch64")
+                ? "natives-macos-arm64"
+                : "natives-macos"
+    }
+    // </AI PROMPT>
     if (os.isLinux()) return "natives-linux"
 }()
 
 def vmOptions = [
         '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
         '--enable-native-access=ALL-UNNAMED',
-        '--sun-misc-unsafe-memory-access=allow'
+        '--sun-misc-unsafe-memory-access=allow',
 ]
+
+// <AI PROMPT>
+// Added -XstartOnFirstThread only for macOS because GLFW/OpenGL window creation
+// on macOS must run on the first JVM thread. Other platforms do not need it.
+if (os.isMacOsX()) {
+    vmOptions += '-XstartOnFirstThread'
+}
+// </AI PROMPT>
 
 repositories {
     mavenCentral()
@@ -64,7 +81,11 @@ test {
 }
 
 application {
-    mainClass = 'pkgDriver.Driver'
+    // <AI PROMPT>
+    // Changed the Gradle run target to DriverTM so ./gradlew run uses the
+    // assignment driver and renders the bunny data resources.
+    mainClass = 'pkgDriver.DriverTM'
+    // </AI PROMPT>
 }
 
 if (VERBOSE_MODE) {
@@ -99,4 +120,3 @@ if (VERBOSE_MODE) {
     println "variable in the build.gradle file"
 
 }
-
