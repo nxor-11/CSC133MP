@@ -21,7 +21,8 @@ public class SlMachinePlayer {
     }
 
     public int play() {
-        gameStatus = SlTTTSPOT.GAME_QUIT;
+        gameStatus = SlTTTSPOT.GAME_INCOMPLETE;
+        runFirstRound();
         return gameStatus;
     }
 
@@ -49,5 +50,40 @@ public class SlMachinePlayer {
 
             return userInput;
         }
+    }
+
+    protected void runFirstRound() {
+        SlIOManager.initPrompt();
+
+        int[] userInput = getUserInput();
+
+        if (userInput.length == 1
+                && userInput[0] == SlTTTSPOT.GAME_QUIT) {
+            gameStatus = SlTTTSPOT.GAME_QUIT;
+            return;
+        }
+
+        myT3Board.setContent(
+                userInput[0],
+                userInput[1],
+                SlTTTSPOT.PLAYER_CHAR);
+
+        int machineRow;
+        int machineCol;
+
+        if (userInput[0] == 1 && userInput[1] == 1) {
+            machineRow = 0;
+            machineCol = 0;
+        } else {
+            machineRow = 1;
+            machineCol = 1;
+        }
+
+        myT3Board.setContent(
+                machineRow,
+                machineCol,
+                SlTTTSPOT.MACHINE_CHAR);
+
+        SlIOManager.printBoard(myT3Board);
     }
 }
