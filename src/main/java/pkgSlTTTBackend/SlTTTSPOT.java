@@ -6,8 +6,8 @@ public class SlTTTSPOT {
     public static final int NUM_COLS = 3;
 
     public static final char DEFAULT_CHAR = '-';
-    public static final char MACHINE_CHAR = 'O';
-    public static final char PLAYER_CHAR = 'X';
+    public static final char MACHINE_CHAR = 'M';
+    public static final char PLAYER_CHAR = 'P';
     public static final char INVALID_CHAR = '?';
 
     public static final int NOT_STARTED = 0;
