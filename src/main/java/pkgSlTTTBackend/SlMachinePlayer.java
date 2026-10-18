@@ -349,14 +349,161 @@ public class SlMachinePlayer {
             }
 
             if (!playToWin()
-                    && !preventWin()
-                    && !takeCenter()
-                    && !takeAnyCorner()) {
-                takeAnySide();
+                    && !preventWin()) {
+                blockFork();
             }
 
             SlIOManager.printBoard(myT3Board);
             gameStatus = isGameOver();
         }
+    }
+
+    protected boolean blockFork() {
+        int[] bestMove = findBestMove();
+
+        if (bestMove == null) {
+            return false;
+        }
+
+        myT3Board.setContent(
+                bestMove[0],
+                bestMove[1],
+                SlTTTSPOT.MACHINE_CHAR);
+
+        return true;
+    }
+
+    private int[] findBestMove() {
+        char[][] board = myT3Board.getBoard();
+        int bestScore = Integer.MIN_VALUE;
+        int[] bestMove = null;
+
+        for (int row = 0; row < SlTTTSPOT.NUM_ROWS; row++) {
+            for (int col = 0; col < SlTTTSPOT.NUM_COLS; col++) {
+                if (board[row][col] == SlTTTSPOT.DEFAULT_CHAR) {
+                    board[row][col] = SlTTTSPOT.MACHINE_CHAR;
+
+                    int score = minimax(board, false);
+
+                    board[row][col] = SlTTTSPOT.DEFAULT_CHAR;
+
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = new int[]{row, col};
+                    }
+                }
+            }
+        }
+
+        return bestMove;
+    }
+
+    private int minimax(
+            final char[][] board,
+            final boolean machineTurn) {
+
+        if (hasWinningLine(
+                board,
+                SlTTTSPOT.MACHINE_CHAR)) {
+            return 1;
+        }
+
+        if (hasWinningLine(
+                board,
+                SlTTTSPOT.PLAYER_CHAR)) {
+            return -1;
+        }
+
+        if (isFull(board)) {
+            return 0;
+        }
+
+        if (machineTurn) {
+            int bestScore = Integer.MIN_VALUE;
+
+            for (int row = 0; row < SlTTTSPOT.NUM_ROWS; row++) {
+                for (int col = 0; col < SlTTTSPOT.NUM_COLS; col++) {
+                    if (board[row][col]
+                            == SlTTTSPOT.DEFAULT_CHAR) {
+
+                        board[row][col] =
+                                SlTTTSPOT.MACHINE_CHAR;
+
+                        int score = minimax(board, false);
+
+                        board[row][col] =
+                                SlTTTSPOT.DEFAULT_CHAR;
+
+                        bestScore = Math.max(bestScore, score);
+                    }
+                }
+            }
+
+            return bestScore;
+
+        } else {
+            int bestScore = Integer.MAX_VALUE;
+
+            for (int row = 0; row < SlTTTSPOT.NUM_ROWS; row++) {
+                for (int col = 0; col < SlTTTSPOT.NUM_COLS; col++) {
+                    if (board[row][col]
+                            == SlTTTSPOT.DEFAULT_CHAR) {
+
+                        board[row][col] =
+                                SlTTTSPOT.PLAYER_CHAR;
+
+                        int score = minimax(board, true);
+
+                        board[row][col] =
+                                SlTTTSPOT.DEFAULT_CHAR;
+
+                        bestScore = Math.min(bestScore, score);
+                    }
+                }
+            }
+
+            return bestScore;
+        }
+    }
+
+    private boolean isFull(final char[][] board) {
+        for (int row = 0; row < SlTTTSPOT.NUM_ROWS; row++) {
+            for (int col = 0; col < SlTTTSPOT.NUM_COLS; col++) {
+                if (board[row][col]
+                        == SlTTTSPOT.DEFAULT_CHAR) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private boolean hasWinningLine(
+            final char[][] board,
+            final char mark) {
+
+        for (int row = 0; row < SlTTTSPOT.NUM_ROWS; row++) {
+            if (board[row][0] == mark
+                    && board[row][1] == mark
+                    && board[row][2] == mark) {
+                return true;
+            }
+        }
+
+        for (int col = 0; col < SlTTTSPOT.NUM_COLS; col++) {
+            if (board[0][col] == mark
+                    && board[1][col] == mark
+                    && board[2][col] == mark) {
+                return true;
+            }
+        }
+
+        return (board[0][0] == mark
+                && board[1][1] == mark
+                && board[2][2] == mark)
+                || (board[0][2] == mark
+                && board[1][1] == mark
+                && board[2][0] == mark);
     }
 }
