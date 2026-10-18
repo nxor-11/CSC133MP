@@ -580,4 +580,70 @@ public class SlMachinePlayer {
     protected void runMidGame() {
         midGamePlay();
     }
+
+    protected boolean isRowBlank(final int row) {
+        for (int col = 0; col < SlTTTSPOT.NUM_COLS; col++) {
+            if (myT3Board.getContent(row, col)
+                    != SlTTTSPOT.DEFAULT_CHAR) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected boolean playTheRow(final int row) {
+        for (int col = 0; col < SlTTTSPOT.NUM_COLS; col++) {
+            if (myT3Board.getContent(row, col)
+                    == SlTTTSPOT.DEFAULT_CHAR) {
+                myT3Board.setContent(
+                        row,
+                        col,
+                        SlTTTSPOT.MACHINE_CHAR);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected boolean playTheCol(final int col) {
+        for (int row = 0; row < SlTTTSPOT.NUM_ROWS; row++) {
+            if (myT3Board.getContent(row, col)
+                    == SlTTTSPOT.DEFAULT_CHAR) {
+                myT3Board.setContent(
+                        row,
+                        col,
+                        SlTTTSPOT.MACHINE_CHAR);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected boolean takeOtherCorner() {
+        int[][] cornerPairs = {
+                {0, 0, 2, 2},
+                {2, 2, 0, 0},
+                {0, 2, 2, 0},
+                {2, 0, 0, 2}
+        };
+
+        for (int[] pair : cornerPairs) {
+            if (myT3Board.getContent(pair[0], pair[1])
+                    == SlTTTSPOT.PLAYER_CHAR
+                    && myT3Board.getContent(pair[2], pair[3])
+                    == SlTTTSPOT.DEFAULT_CHAR) {
+
+                myT3Board.setContent(
+                        pair[2],
+                        pair[3],
+                        SlTTTSPOT.MACHINE_CHAR);
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
