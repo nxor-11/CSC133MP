@@ -137,4 +137,28 @@ public class SlMachinePlayer {
                 && myT3Board.getContent(1, 1) == mark
                 && myT3Board.getContent(2, 0) == mark;
     }
+
+    protected void printGameOverMessage(final int status) {
+        switch (status) {
+            case SlTTTSPOT.GAME_PLAYER:
+                SlIOManager.playerWinMessage();
+                break;
+
+            case SlTTTSPOT.GAME_MACHINE:
+                SlIOManager.machineWinMessage();
+                break;
+
+            case SlTTTSPOT.GAME_DRAW:
+                SlIOManager.gameDrawMessage();
+                break;
+
+            case SlTTTSPOT.GAME_QUIT:
+                SlIOManager.quitGameMessage();
+                break;
+
+            default:
+                SlIOManager.errorInPlayMessage();
+                break;
+        }
+    }
 }
