@@ -93,10 +93,7 @@ public class SlMachinePlayer {
             machineCol = 1;
         }
 
-        myT3Board.setContent(
-                machineRow,
-                machineCol,
-                SlTTTSPOT.MACHINE_CHAR);
+        startMovePlay(machineRow, machineCol);
 
         SlIOManager.printBoard(myT3Board);
 
@@ -645,5 +642,23 @@ public class SlMachinePlayer {
         }
 
         return false;
+    }
+
+    protected void startMovePlay(
+            final int row,
+            final int col) {
+
+        if (row >= 0
+                && row < SlTTTSPOT.NUM_ROWS
+                && col >= 0
+                && col < SlTTTSPOT.NUM_COLS
+                && myT3Board.getContent(row, col)
+                == SlTTTSPOT.DEFAULT_CHAR) {
+
+            myT3Board.setContent(
+                    row,
+                    col,
+                    SlTTTSPOT.MACHINE_CHAR);
+        }
     }
 }
