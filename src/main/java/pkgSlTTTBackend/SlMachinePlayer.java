@@ -34,7 +34,7 @@ public class SlMachinePlayer {
             return gameStatus;
         }
 
-        midGamePlay();
+        runMidGame();
         printGameOverMessage(gameStatus);
 
         return gameStatus;
@@ -575,5 +575,9 @@ public class SlMachinePlayer {
         }
 
         return false;
+    }
+
+    protected void runMidGame() {
+        midGamePlay();
     }
 }
