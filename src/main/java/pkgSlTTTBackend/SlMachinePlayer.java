@@ -6,6 +6,10 @@ public class SlMachinePlayer {
     private SlIOManager myIOManager;
     private int gameStatus;
 
+    public int getGameStatus() { //getter for game status
+        return gameStatus;
+    }
+
     public SlMachinePlayer() {
         myT3Board = new SlTTTBoard();
         myIOManager = new SlIOManager();
@@ -349,7 +353,8 @@ public class SlMachinePlayer {
             }
 
             if (!playToWin()
-                    && !preventWin()) {
+                    && !preventWin()
+                    && !createFork()) {
                 blockFork();
             }
 
@@ -505,5 +510,70 @@ public class SlMachinePlayer {
                 || (board[0][2] == mark
                 && board[1][1] == mark
                 && board[2][0] == mark);
+    }
+    //helper methods for createforak and stuff
+    private int countWinningMoves(
+            final char[][] board,
+            final char mark) {
+
+        int count = 0;
+
+        for (int row = 0; row < SlTTTSPOT.NUM_ROWS; row++) {
+            for (int col = 0; col < SlTTTSPOT.NUM_COLS; col++) {
+                if (board[row][col]
+                        == SlTTTSPOT.DEFAULT_CHAR
+                        && wouldWinOnBoard(board, row, col, mark)) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private boolean wouldWinOnBoard(
+            final char[][] board,
+            final int row,
+            final int col,
+            final char mark) {
+
+        board[row][col] = mark;
+        boolean result = hasWinningLine(board, mark);
+        board[row][col] = SlTTTSPOT.DEFAULT_CHAR;
+
+        return result;
+    }
+
+    protected boolean createFork() {
+        char[][] board = myT3Board.getBoard();
+
+        for (int row = 0; row < SlTTTSPOT.NUM_ROWS; row++) {
+            for (int col = 0; col < SlTTTSPOT.NUM_COLS; col++) {
+                if (board[row][col]
+                        == SlTTTSPOT.DEFAULT_CHAR) {
+
+                    board[row][col] =
+                            SlTTTSPOT.MACHINE_CHAR;
+
+                    int winningMoves =
+                            countWinningMoves(
+                                    board,
+                                    SlTTTSPOT.MACHINE_CHAR);
+
+                    board[row][col] =
+                            SlTTTSPOT.DEFAULT_CHAR;
+
+                    if (winningMoves >= 2) {
+                        myT3Board.setContent(
+                                row,
+                                col,
+                                SlTTTSPOT.MACHINE_CHAR);
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }
