@@ -257,4 +257,61 @@ public class SlMachinePlayer {
 
         return topRight == mark && center == mark && bottomLeft == mark;
     }
+
+    protected boolean takeCenter() {
+        if (myT3Board.getContent(1, 1)
+                == SlTTTSPOT.DEFAULT_CHAR) {
+            myT3Board.setContent(
+                    1,
+                    1,
+                    SlTTTSPOT.MACHINE_CHAR);
+            return true;
+        }
+
+        return false;
+    }
+
+    protected boolean takeAnyCorner() {
+        int[][] corners = {
+                {0, 0},
+                {0, 2},
+                {2, 0},
+                {2, 2}
+        };
+
+        for (int[] corner : corners) {
+            if (myT3Board.getContent(corner[0], corner[1])
+                    == SlTTTSPOT.DEFAULT_CHAR) {
+                myT3Board.setContent(
+                        corner[0],
+                        corner[1],
+                        SlTTTSPOT.MACHINE_CHAR);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected boolean takeAnySide() {
+        int[][] sides = {
+                {0, 1},
+                {1, 0},
+                {1, 2},
+                {2, 1}
+        };
+
+        for (int[] side : sides) {
+            if (myT3Board.getContent(side[0], side[1])
+                    == SlTTTSPOT.DEFAULT_CHAR) {
+                myT3Board.setContent(
+                        side[0],
+                        side[1],
+                        SlTTTSPOT.MACHINE_CHAR);
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
