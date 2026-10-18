@@ -22,7 +22,17 @@ public class SlMachinePlayer {
 
     public int play() {
         gameStatus = SlTTTSPOT.GAME_INCOMPLETE;
+
         runFirstRound();
+
+        if (gameStatus == SlTTTSPOT.GAME_QUIT) {
+            printGameOverMessage(gameStatus);
+            return gameStatus;
+        }
+
+        midGamePlay();
+        printGameOverMessage(gameStatus);
+
         return gameStatus;
     }
 
@@ -313,5 +323,40 @@ public class SlMachinePlayer {
         }
 
         return false;
+    }
+
+    protected void midGamePlay() {
+        while (gameStatus == SlTTTSPOT.GAME_INCOMPLETE) {
+            int[] userInput = getUserInput();
+
+            if (userInput.length == 1
+                    && userInput[0] == SlTTTSPOT.GAME_QUIT) {
+                gameStatus = SlTTTSPOT.GAME_QUIT;
+                return;
+            }
+
+            myT3Board.setContent(
+                    userInput[0],
+                    userInput[1],
+                    SlTTTSPOT.PLAYER_CHAR);
+
+            SlIOManager.printBoard(myT3Board);
+
+            gameStatus = isGameOver();
+
+            if (gameStatus != SlTTTSPOT.GAME_INCOMPLETE) {
+                return;
+            }
+
+            if (!playToWin()
+                    && !preventWin()
+                    && !takeCenter()
+                    && !takeAnyCorner()) {
+                takeAnySide();
+            }
+
+            SlIOManager.printBoard(myT3Board);
+            gameStatus = isGameOver();
+        }
     }
 }
