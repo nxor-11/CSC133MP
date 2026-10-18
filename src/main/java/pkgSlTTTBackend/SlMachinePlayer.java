@@ -161,4 +161,100 @@ public class SlMachinePlayer {
                 break;
         }
     }
+
+    protected boolean playToWin() {
+        int[] winningMove =
+                findImmediateMove(SlTTTSPOT.MACHINE_CHAR);
+
+        if (winningMove == null) {
+            return false;
+        }
+
+        myT3Board.setContent(
+                winningMove[0],
+                winningMove[1],
+                SlTTTSPOT.MACHINE_CHAR);
+
+        return true;
+    }
+
+    protected boolean preventWin() {
+        int[] blockingMove =
+                findImmediateMove(SlTTTSPOT.PLAYER_CHAR);
+
+        if (blockingMove == null) {
+            return false;
+        }
+
+        myT3Board.setContent(
+                blockingMove[0],
+                blockingMove[1],
+                SlTTTSPOT.MACHINE_CHAR);
+
+        return true;
+    }
+
+    private int[] findImmediateMove(final char mark) {
+        for (int row = 0; row < SlTTTSPOT.NUM_ROWS; row++) {
+            for (int col = 0; col < SlTTTSPOT.NUM_COLS; col++) {
+                if (myT3Board.getContent(row, col)
+                        == SlTTTSPOT.DEFAULT_CHAR
+                        && wouldWin(row, col, mark)) {
+                    return new int[]{row, col};
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private boolean wouldWin(
+            final int row,
+            final int col,
+            final char mark) {
+
+        int rowMatches = 0;
+        int colMatches = 0;
+
+        for (int index = 0; index < SlTTTSPOT.NUM_COLS; index++) {
+            char rowContent = index == col
+                    ? mark
+                    : myT3Board.getContent(row, index);
+
+            char colContent = index == row
+                    ? mark
+                    : myT3Board.getContent(index, col);
+
+            if (rowContent == mark) {
+                rowMatches++;
+            }
+
+            if (colContent == mark) {
+                colMatches++;
+            }
+        }
+
+        if (rowMatches == SlTTTSPOT.NUM_COLS
+                || colMatches == SlTTTSPOT.NUM_ROWS) {
+            return true;
+        }
+
+        char topLeft = row == 0 && col == 0
+                ? mark : myT3Board.getContent(0, 0);
+        char center = row == 1 && col == 1
+                ? mark : myT3Board.getContent(1, 1);
+        char bottomRight = row == 2 && col == 2
+                ? mark : myT3Board.getContent(2, 2);
+
+        if (topLeft == mark && center == mark && bottomRight == mark) {
+            return true;
+        }
+
+        char topRight = row == 0 && col == 2
+                ? mark : myT3Board.getContent(0, 2);
+        char bottomLeft = row == 2 && col == 0
+                ? mark : myT3Board.getContent(2, 0);
+
+        return topRight == mark && center == mark && bottomLeft == mark;
+    }
 }
