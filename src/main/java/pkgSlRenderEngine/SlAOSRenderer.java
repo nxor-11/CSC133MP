@@ -26,8 +26,8 @@ public class SlAOSRenderer {
 
     private long glfwWindow;
 
-    private int windowWidth = WIN_WIDTH;
-    private int windowHeight = WIN_HEIGHT;
+    private int framebufferWidth; //switched from WIN_WIDTH to framebufferWidth ti adjust for iOS logical window size
+    private int framebufferHeight; //same switch here are one before
 
     private int vbo = 0;
     private int ibo = 0;
@@ -78,8 +78,8 @@ public class SlAOSRenderer {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
         glfwWindow = glfwCreateWindow(
-                windowWidth,
-                windowHeight,
+                WIN_WIDTH,
+                WIN_HEIGHT,
                 "CSC133",
                 NULL,
                 NULL);
@@ -110,14 +110,26 @@ public class SlAOSRenderer {
                     @Override
                     public void invoke(long window, int width, int height) {
                         if (width > 0 && height > 0) {
-                            windowWidth = width;
-                            windowHeight = height;
+                            framebufferWidth = width; //switched for iOS
+                            framebufferHeight = height; //switched for iOS
                         }
                     }
                 });
 
         glfwSetWindowPos(glfwWindow, WIN_ORG_X, WIN_ORG_Y);
         glfwMakeContextCurrent(glfwWindow);
+
+        IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
+        IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
+
+        glfwGetFramebufferSize(
+                glfwWindow,
+                widthBuffer,
+                heightBuffer);
+
+        framebufferWidth = widthBuffer.get(0);
+        framebufferHeight = heightBuffer.get(0);
+
         glfwSwapInterval(1);
         glfwShowWindow(glfwWindow);
     }
@@ -130,7 +142,7 @@ public class SlAOSRenderer {
     private void initOpenGL() {
         GL.createCapabilities();
 
-        glViewport(0, 0, windowWidth, windowHeight);
+        glViewport(0, 0, framebufferWidth, framebufferHeight);
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
         int shaderProgram = glCreateProgram();
@@ -243,7 +255,7 @@ public class SlAOSRenderer {
             glfwPollEvents();
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glViewport(0, 0, windowWidth, windowHeight);
+            glViewport(0, 0, WIN_WIDTH, WIN_HEIGHT);
 
             updateMatrices();
 
@@ -267,9 +279,9 @@ public class SlAOSRenderer {
 
         projection.setOrtho(
                 0.0f,
-                windowWidth,
+                WIN_WIDTH,
                 0.0f,
-                windowHeight,
+                WIN_HEIGHT,
                 VIEW_NEAR,
                 VIEW_FAR);
 
