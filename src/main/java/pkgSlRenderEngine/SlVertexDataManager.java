@@ -37,4 +37,25 @@ public class SlVertexDataManager {
     public int getVArrayLength() {
         return 0;
     }
+    public void generateTileArrayVertices(
+            final int numRows,
+            final int numCols,
+            final float offset,
+            final float padding,
+            final float sizeH,
+            final float sizeV) {
+    }
+
+    private void generateTileGeometry(
+            final int startIndex,
+            final float orgX,
+            final float orgY,
+            final float sizeH,
+            final float sizeV) {
+    }
+
+    private void generateTileVertexIndices(
+            final int startIndex,
+            final int startVertexNum) {
+    }
 }
