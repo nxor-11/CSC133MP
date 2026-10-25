@@ -255,7 +255,7 @@ public class SlAOSRenderer {
             glfwPollEvents();
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glViewport(0, 0, WIN_WIDTH, WIN_HEIGHT);
+            glViewport(0, 0, framebufferWidth, framebufferHeight);
 
             updateMatrices();
 
