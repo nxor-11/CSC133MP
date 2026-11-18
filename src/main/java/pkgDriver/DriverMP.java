@@ -9,6 +9,7 @@ public class DriverMP {
     public static void main(String[] args) {
         printNeighbors();
         FYKDemo();
+        saveFileDemo();
     }
 
     private static void printNeighbors() {
@@ -48,5 +49,21 @@ public class DriverMP {
                 "After Fisher-Yates-Knuth randomization with seed: "
                         + randomSeed
         );
+    }
+
+    private static void saveFileDemo() {
+        Sl2DIntArray originalArray =
+                new Sl2DIntArray("src/main/resources/ppa_test1.txt");
+
+        boolean saveWorked =
+                originalArray.saveToFile("build/ppa_saved.txt", 1);
+
+        System.out.println();
+        System.out.println("saveToFile returned: " + saveWorked);
+
+        Sl2DIntArray reloadedArray =
+                new Sl2DIntArray("build/ppa_saved.txt");
+
+        reloadedArray.printArray("Reloaded saved array");
     }
 }
