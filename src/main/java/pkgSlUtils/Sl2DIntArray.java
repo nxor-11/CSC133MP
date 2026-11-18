@@ -23,6 +23,40 @@ public class Sl2DIntArray {
     }
 
     public void printNeighbors(int nDistance, int[][] rgRowsCols) {
+        System.out.println("N" + nDistance + "Neighbors:");
+
+        for (int[] rowCol : rgRowsCols) {
+            int row = rowCol[0];
+            int col = rowCol[1];
+
+            SlRCPair[] neighbors;
+
+            if (nDistance == 1) {
+                neighbors = getN1NeighborsArray(row, col);
+            } else if (nDistance == 2) {
+                neighbors = getN2NeighborsArray(row, col);
+            } else if (nDistance == 3) {
+                neighbors = getN3NeighborsArray(row, col);
+            } else {
+                throw new IllegalArgumentException(
+                        "Neighbor distance must be 1, 2, or 3."
+                );
+            }
+
+            System.out.print("[" + row + "][" + col + "]: ");
+
+            for (SlRCPair neighbor : neighbors) {
+                System.out.print(
+                        "{" + neighbor.row()
+                                + ", " + neighbor.col()
+                                + "}, "
+                );
+            }
+
+            System.out.println();
+        }
+
+        System.out.println();
     }
 
     protected void setDataArray(int[][] newData) {
