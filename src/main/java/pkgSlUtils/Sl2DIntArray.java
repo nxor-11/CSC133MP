@@ -1,5 +1,9 @@
 package pkgSlUtils;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Random;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -154,6 +158,33 @@ public class Sl2DIntArray {
     }
 
     public void randomizeViaFisherYatesKnuth(Long myInteger) {
+        randomSeed = myInteger;
+
+        Random random = new Random(myInteger);
+
+        int numRows = arrayData.length;
+        int numCols = arrayData[0].length;
+        int totalElements = numRows * numCols;
+
+        for (int currentIndex = totalElements - 1;
+             currentIndex > 0;
+             currentIndex--) {
+
+            int randomIndex = random.nextInt(currentIndex + 1);
+
+            int currentRow = currentIndex / numCols;
+            int currentCol = currentIndex % numCols;
+
+            int randomRow = randomIndex / numCols;
+            int randomCol = randomIndex % numCols;
+
+            int temporaryValue = arrayData[currentRow][currentCol];
+
+            arrayData[currentRow][currentCol] =
+                    arrayData[randomRow][randomCol];
+
+            arrayData[randomRow][randomCol] = temporaryValue;
+        }
     }
 
     public void loadFile(String dataFilePath) {
@@ -196,7 +227,30 @@ public class Sl2DIntArray {
     }
 
     public boolean saveToFile(String outFilePath, int defaultValue) {
-        return false;
+        try (PrintWriter outputFile =
+                     new PrintWriter(new FileWriter(outFilePath))) {
+
+            int numRows = arrayData.length;
+            int numCols = arrayData[0].length;
+
+            outputFile.println(defaultValue);
+            outputFile.println(numRows + " " + numCols);
+
+            for (int row = 0; row < numRows; row++) {
+                outputFile.print(row);
+
+                for (int col = 0; col < numCols; col++) {
+                    outputFile.print(" " + arrayData[row][col]);
+                }
+
+                outputFile.println();
+            }
+
+            return true;
+
+        } catch (IOException error) {
+            return false;
+        }
     }
 
     public void printArray(String title) {
