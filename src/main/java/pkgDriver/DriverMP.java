@@ -69,24 +69,41 @@ public class DriverMP {
     }
 
     private static void pingPongDemo() {
-        SlPingPongArray pingPongArray =
-                new SlPingPongArray(5, 7);
+        TestPingPongArray pingPongArray =
+                new TestPingPongArray(3, 3);
 
-        pingPongArray.loadFile(
-                "src/main/resources/ppa_test1.txt"
-        );
+        pingPongArray.testSetCellValue(1, 1, 5);
 
         System.out.println();
         System.out.println("PingPongArray test:");
-
         System.out.println(
-                "Cell [2][3] = "
-                        + pingPongArray.getCellValue(2, 3)
+                "Before swap, center cell = "
+                        + pingPongArray.getCellValue(1, 1)
         );
 
+        pingPongArray.testSwapLiveAndNext();
+
         System.out.println(
-                "Cell [0][0] = "
-                        + pingPongArray.getCellValue(0, 0)
+                "After swap, center cell = "
+                        + pingPongArray.getCellValue(1, 1)
         );
+    }
+    private static class TestPingPongArray extends SlPingPongArray {
+
+        public TestPingPongArray(int numRows, int numCols) {
+            super(numRows, numCols);
+        }
+
+        public void testSetCellValue(int row, int col, int value) {
+            setCellValue(row, col, value);
+        }
+
+        public int testGetN2NeighborsSum(int row, int col) {
+            return getN2NeighborsSum(row, col);
+        }
+
+        public void testSwapLiveAndNext() {
+            swapLiveAndNext();
+        }
     }
 }
