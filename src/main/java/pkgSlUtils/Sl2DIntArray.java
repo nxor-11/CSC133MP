@@ -44,7 +44,20 @@ public class Sl2DIntArray {
     }
 
     protected SlRCPair[] getN1NeighborsArray(int orgRow, int orgCol) {
-        return null;
+        int numRows = arrayData.length;
+        int numCols = arrayData[0].length;
+
+        int upRow = (orgRow - 1 + numRows) % numRows;
+        int downRow = (orgRow + 1) % numRows;
+        int leftCol = (orgCol - 1 + numCols) % numCols;
+        int rightCol = (orgCol + 1) % numCols;
+
+        return new SlRCPair[] {
+                new SlRCPair(upRow, orgCol),
+                new SlRCPair(orgRow, leftCol),
+                new SlRCPair(downRow, orgCol),
+                new SlRCPair(orgRow, rightCol)
+        };
     }
 
     public SlRCPair[] getN2NeighborsArray(int orgRow, int orgCol) {
