@@ -10,6 +10,7 @@ public class DriverMP {
         printNeighbors();
         FYKDemo();
         saveFileDemo();
+        pingPongDemo();
     }
 
     private static void printNeighbors() {
@@ -65,5 +66,27 @@ public class DriverMP {
                 new Sl2DIntArray("build/ppa_saved.txt");
 
         reloadedArray.printArray("Reloaded saved array");
+    }
+
+    private static void pingPongDemo() {
+        SlPingPongArray pingPongArray =
+                new SlPingPongArray(5, 7);
+
+        pingPongArray.loadFile(
+                "src/main/resources/ppa_test1.txt"
+        );
+
+        System.out.println();
+        System.out.println("PingPongArray test:");
+
+        System.out.println(
+                "Cell [2][3] = "
+                        + pingPongArray.getCellValue(2, 3)
+        );
+
+        System.out.println(
+                "Cell [0][0] = "
+                        + pingPongArray.getCellValue(0, 0)
+        );
     }
 }
