@@ -82,7 +82,41 @@ public class Sl2DIntArray {
     }
 
     public SlRCPair[] getN3NeighborsArray(int orgRow, int orgCol) {
-        return null;
+        int numRows = arrayData.length;
+        int numCols = arrayData[0].length;
+
+        int rowAbove2 = (orgRow - 2 + numRows) % numRows;
+        int rowAbove1 = (orgRow - 1 + numRows) % numRows;
+        int rowBelow1 = (orgRow + 1) % numRows;
+        int rowBelow2 = (orgRow + 2) % numRows;
+
+        int colLeft2 = (orgCol - 2 + numCols) % numCols;
+        int colLeft1 = (orgCol - 1 + numCols) % numCols;
+        int colRight1 = (orgCol + 1) % numCols;
+        int colRight2 = (orgCol + 2) % numCols;
+
+        return new SlRCPair[] {
+                new SlRCPair(rowAbove2, colRight2),
+                new SlRCPair(rowAbove2, colRight1),
+                new SlRCPair(rowAbove2, orgCol),
+                new SlRCPair(rowAbove2, colLeft1),
+                new SlRCPair(rowAbove2, colLeft2),
+
+                new SlRCPair(rowAbove1, colRight2),
+                new SlRCPair(rowAbove1, colLeft2),
+
+                new SlRCPair(orgRow, colRight2),
+                new SlRCPair(orgRow, colLeft2),
+
+                new SlRCPair(rowBelow1, colRight2),
+                new SlRCPair(rowBelow1, colLeft2),
+
+                new SlRCPair(rowBelow2, colRight2),
+                new SlRCPair(rowBelow2, colRight1),
+                new SlRCPair(rowBelow2, orgCol),
+                new SlRCPair(rowBelow2, colLeft1),
+                new SlRCPair(rowBelow2, colLeft2)
+        };
     }
 
     public void randomizeViaFisherYatesKnuth(Long myInteger) {
