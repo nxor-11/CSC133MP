@@ -11,6 +11,7 @@ public class Sl2DIntArray {
     private int[][] arrayData;
 
     public Sl2DIntArray(int[][] rawData) {
+        arrayData = rawData;
     }
 
     public Sl2DIntArray(String filePath) {
@@ -18,23 +19,28 @@ public class Sl2DIntArray {
     }
 
     public Sl2DIntArray(int numRows, int numCols) {
+        arrayData = new int[numRows][numCols];
     }
 
     public void printNeighbors(int nDistance, int[][] rgRowsCols) {
     }
 
     protected void setDataArray(int[][] newData) {
+        arrayData = newData;
     }
 
     protected int[][] swapDataArray(int[][] newArray) {
-        return null;
+        int[][] oldArray = arrayData;
+        arrayData = newArray;
+        return oldArray;
     }
 
     protected void setData(int row, int col, int newData) {
+        arrayData[row][col] = newData;
     }
 
     public int getData(int row, int col) {
-        return 0;
+        return arrayData[row][col];
     }
 
     protected SlRCPair[] getN1NeighborsArray(int orgRow, int orgCol) {
@@ -85,7 +91,10 @@ public class Sl2DIntArray {
     }
 
     public int[] getNumRowsCols() {
-        return null;
+        return new int[] {
+                arrayData.length,
+                arrayData[0].length
+        };
     }
 
     public boolean saveToFile(String outFilePath, int defaultValue) {
@@ -105,10 +114,18 @@ public class Sl2DIntArray {
     }
 
     protected int[][] getDataArray() {
-        return null;
+        return arrayData;
     }
 
     public int[][] getDataClone() {
-        return null;
+        int[][] clonedArray = new int[arrayData.length][arrayData[0].length];
+
+        for (int row = 0; row < arrayData.length; row++) {
+            for (int col = 0; col < arrayData[row].length; col++) {
+                clonedArray[row][col] = arrayData[row][col];
+            }
+        }
+
+        return clonedArray;
     }
 }
